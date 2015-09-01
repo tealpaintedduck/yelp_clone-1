@@ -2,7 +2,8 @@
   - @restaurants.each do |restaurant|
     %h2= restaurant.name
     = link_to restaurant.name, restaurant_path(restaurant)
+    = link_to "Edit #{restaurant.name}", edit_restaurant_path(restaurant)
 - else
   %h1 No restaurants yet!
 
-%a(href='/restaurants/new') Add a restaurant
+%a(href=new_restaurant_path) Add a restaurant
