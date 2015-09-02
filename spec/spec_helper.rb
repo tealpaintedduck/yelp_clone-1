@@ -14,6 +14,8 @@
 
 require 'database_cleaner'
 require 'factory_girl_rails'
+
+require_relative './helpers/user_helpers.rb'
 # The `.rspec` file also contains a few flags that are not defaults but that
 # users commonly want.
 #

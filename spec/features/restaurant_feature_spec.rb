@@ -60,44 +60,46 @@ feature 'restaurants' do
   end
 
   context 'editing restaurants' do
-    before{ Restaurant.create name: 'KFC' }
-
-    scenario 'let a user edit a restaurant' do
+    before(:each) do
       visit '/restaurants'
-      click_link 'Edit KFC'
-      fill_in 'Name', with: 'Kentucky Fried Chicken'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'Trade'
+      click_button 'Create Restaurant'
+    end
+
+    scenario 'let a user edit a restaurant if created by them' do
+      click_link 'Edit Trade'
+      fill_in 'Name', with: 'TradeMade'
       click_button 'Update Restaurant'
-      expect(page).to have_content 'Kentucky Fried Chicken'
+      expect(page).to have_content 'TradeMade'
       expect(current_path).to eq '/restaurants'
+    end
+
+    scenario 'do not allow a user to edit a restaurant if not created by them' do
+      click_link 'Sign out'
+
+      jeremina = build(:jeremina)
+      sign_up(jeremina)
+      expect(page).not_to have_content 'Edit Trade'
     end
   end
 
   context 'deleting restaurants' do
     before{ Restaurant.create name: 'KFC' }
 
-    scenario 'removes a restaurant when a user clicks a delete link' do
+    scenario 'let a user delete a restaurant if created by them' do
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
     end
+
+    xscenario 'do not allow a user to delete a restaurant if not created by them' do
+
+    end
   end
+
 end
 
-def sign_up(user)
-  visit '/'
-  click_link "Sign up"
-  fill_in "Email", with: user.email
-  fill_in "Password", with: user.password
-  fill_in "Password confirmation", with: user.password_confirmation
-  click_button "Sign up"
-end
 
-def sign_in(user)
-  visit '/'
-  click_link "Sign in"
-  fill_in "Email", with: user.email
-  fill_in "Password", with: user.password
-  click_on "Sign in"
-end
 

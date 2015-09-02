@@ -19,7 +19,11 @@ Rails.application.routes.draw do
 
   resources :restaurants do
     resources :reviews
-    resource :user
+  end
+
+
+  resources :users do
+    resources :restaurants
   end
 
 
