@@ -85,7 +85,12 @@ feature 'restaurants' do
   end
 
   context 'deleting restaurants' do
-    before{ Restaurant.create name: 'KFC' }
+    before(:each) do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+    end
 
     scenario 'let a user delete a restaurant if created by them' do
       visit '/restaurants'
@@ -94,8 +99,12 @@ feature 'restaurants' do
       expect(page).to have_content 'Restaurant deleted successfully'
     end
 
-    xscenario 'do not allow a user to delete a restaurant if not created by them' do
+    scenario 'do not allow a user to delete a restaurant if not created by them' do
+      click_link 'Sign out'
 
+      jeremina = build(:jeremina)
+      sign_up(jeremina)
+      expect(page).not_to have_content 'Delete KFC'
     end
   end
 
